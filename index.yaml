@@ -3,12 +3,12 @@ entries:
   lf-charts:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-10-08T22:26:04.182924+03:00"
+    created: "2023-10-08T22:31:25.168824+03:00"
     description: A Helm chart for Kubernetes
-    digest: 1dd9934a7c7685f4ed573e73049de82b9d4fc3ce75d84c48bb91d5f2ad38a8a0
+    digest: ef3412f792d7c89c4f5abcf1d99d5dfa921aa9d451f6211ff1ac82fef05dd371
     name: lf-charts
     type: application
     urls:
-    - https://github.com/p-bogdan/lf-helm-charts/charts/lf-charts-0.1.0.tgz
+    - https://github.com/p-bogdan/lf-helm-charts/lf-charts-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-08T22:26:04.172504+03:00"
+generated: "2023-10-08T22:31:25.15961+03:00"
