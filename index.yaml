@@ -1,9 +1,106 @@
 apiVersion: v1
 entries:
+  commento:
+  - apiVersion: v2
+    appVersion: v1.8.0
+    created: "2023-10-08T23:03:41.531988+03:00"
+    dependencies:
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.9
+    description: A Helm chart for Commento on Kubernetes
+    digest: b09f917992b707cca25ca6b7c1bbfabc8960e5f18e503b4f9dd78b0c155f3bb7
+    maintainers:
+    - name: groundhog2k
+    name: commento
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/commento-0.1.13.tgz
+    version: 0.1.13
+  elasticsearch:
+  - apiVersion: v2
+    appVersion: 7.12.0
+    created: "2023-10-08T23:03:41.532421+03:00"
+    description: A Helm chart for Elasticsearch on Kubernetes
+    digest: c64a08d138f4db302dbcadd2984aad69a7b3f7b9140eec796552c110bb386d6f
+    maintainers:
+    - name: groundhog2k
+    name: elasticsearch
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/elasticsearch-0.2.1.tgz
+    version: 0.2.1
+  ghost:
+  - apiVersion: v2
+    appVersion: 4.2.1
+    created: "2023-10-08T23:03:41.533271+03:00"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.10
+    description: A Helm chart for Ghost on Kubernetes
+    digest: c773b8ed29538e52063a2595599de3b263a32963131c71e5258a41e7723062e3
+    maintainers:
+    - name: groundhog2k
+    name: ghost
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/ghost-0.5.2.tgz
+    version: 0.5.2
+  gitea:
+  - apiVersion: v2
+    appVersion: 1.14.1
+    created: "2023-10-08T23:03:41.534785+03:00"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.10
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.9
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.3.1
+    description: A Helm chart for Gitea on Kubernetes
+    digest: b489e75db5258aaad903f89595eea23eac7d7b9f78eb24f934e4b42439cbb717
+    maintainers:
+    - name: groundhog2k
+    name: gitea
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/gitea-0.3.4.tgz
+    version: 0.3.4
+  graylog:
+  - apiVersion: v2
+    appVersion: 4.0.6
+    created: "2023-10-08T23:03:41.536059+03:00"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.10
+    - condition: elasticsearch.enabled
+      name: elasticsearch
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.1.1
+    description: A Helm chart for Graylog on Kubernetes
+    digest: 3c9a57a4b03b7d248ace07e1e6043a8f24d8a234cc2fabe66a3d26df1259171e
+    maintainers:
+    - name: groundhog2k
+    name: graylog
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/graylog-0.1.14.tgz
+    version: 0.1.14
   lf-charts:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-10-08T23:01:38.025789+03:00"
+    created: "2023-10-08T23:03:41.544242+03:00"
     description: A Helm chart for Kubernetes
     digest: 9a877b6b45c17be9e443524f874b3dff3f9759839f7e2f4e0e8b812ba74a4abd
     name: lf-charts
@@ -11,4 +108,144 @@ entries:
     urls:
     - https://p-bogdan.github.io/lf-helm-charts/lf-charts-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-08T23:01:38.018468+03:00"
+  mariadb:
+  - apiVersion: v2
+    appVersion: 10.5.9
+    created: "2023-10-08T23:03:41.544558+03:00"
+    description: A Helm chart for MariaDB on Kubernetes
+    digest: c7592e9ec620131c6ec407ea4e431d0f6e616918965a3767d215fdca3eafb8f4
+    maintainers:
+    - name: groundhog2k
+    name: mariadb
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/mariadb-0.2.10.tgz
+    version: 0.2.10
+  metrics-server:
+  - apiVersion: v2
+    appVersion: v0.4.2
+    created: "2023-10-08T23:03:41.544907+03:00"
+    description: A Helm chart for Kubernetes metrics-server
+    digest: 0ca90537b879336b0b198be98a690f5bc4aba3c3604e984b84de18a0b9f2d389
+    keywords:
+    - metrics-server
+    maintainers:
+    - name: groundhog2k
+    name: metrics-server
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/metrics-server-2.12.3.tgz
+    version: 2.12.3
+  mongodb:
+  - apiVersion: v2
+    appVersion: 4.2.12
+    created: "2023-10-08T23:03:41.545231+03:00"
+    description: A Helm chart to deploy MongoDB
+    digest: edd6e7b46b0d7840a4dea8c8faed2781db543a698560da11b93ef4e04a0b3fc9
+    maintainers:
+    - name: groundhog2k
+    name: mongodb
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/mongodb-0.2.10.tgz
+    version: 0.2.10
+  nextcloud:
+  - apiVersion: v2
+    appVersion: 21.0.1-apache
+    created: "2023-10-08T23:03:41.546512+03:00"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.10
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.9
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.3.1
+    description: A Helm chart for Nextcloud on Kubernetes
+    digest: 01c2ff1577ac35637be854176f417a218b34be284950eaad37ae5c4af7445f2f
+    maintainers:
+    - name: groundhog2k
+    name: nextcloud
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/nextcloud-0.5.3.tgz
+    version: 0.5.3
+  nfs-client-provisioner:
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2023-10-08T23:03:41.546777+03:00"
+    deprecated: true
+    description: nfs-client is an automatic provisioner that used your *already configured*
+      NFS server, automatically creating Persistent Volumes.
+    digest: 2e35eba16d1b8bebd65828df93831ea7b417c2b4b6df726dec574abf21ed3110
+    keywords:
+    - nfs
+    - storage
+    name: nfs-client-provisioner
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/nfs-client-provisioner-4.0.0.tgz
+    version: 4.0.0
+  postgres:
+  - apiVersion: v2
+    appVersion: "13.2"
+    created: "2023-10-08T23:03:41.547088+03:00"
+    description: A Helm chart for PostgreSQL on Kubernetes, forked from groundhog2k2.
+    digest: 9ebf07e289ccfdb15dca40c94a575d608a2cf4763d6b41d4eea6bd8b7409d798
+    maintainers:
+    - email: gouravshah@schoolofdevops.com
+      name: Gourav Shah
+    name: postgres
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/postgres-0.2.11.tgz
+    version: 0.2.11
+  rabbitmq:
+  - apiVersion: v2
+    appVersion: 3.8.14
+    created: "2023-10-08T23:03:41.547902+03:00"
+    description: A Helm chart for a RabbitMQ cluster on Kubernetes
+    digest: 88f803173c41868990f153041a738b9b38f61503e7a8c58d6ae16bad78881527
+    maintainers:
+    - name: groundhog2k
+    name: rabbitmq
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/rabbitmq-0.2.13.tgz
+    version: 0.2.13
+  redis:
+  - apiVersion: v2
+    appVersion: 6.2.1
+    created: "2023-10-08T23:03:41.548182+03:00"
+    description: A Helm chart for Redis on Kubernetes
+    digest: 1ce58db90d7dfaf050006c70189fb1a21a72ba45dd741009456886c5c37bebc2
+    maintainers:
+    - name: groundhog2k
+    name: redis
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/redis-0.3.1.tgz
+    version: 0.3.1
+  wordpress:
+  - apiVersion: v2
+    appVersion: 5.7.0-apache
+    created: "2023-10-08T23:03:41.548874+03:00"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.2.10
+    description: A Helm chart for Wordpress on Kubernetes
+    digest: 25a9cf5e45d8b7b1a0d025b2bb672febd488260fdce0996c46ad76df55f9940a
+    maintainers:
+    - name: groundhog2k
+    name: wordpress
+    type: application
+    urls:
+    - https://p-bogdan.github.io/lf-helm-charts/wordpress-0.3.1.tgz
+    version: 0.3.1
+generated: "2023-10-08T23:03:41.531027+03:00"
