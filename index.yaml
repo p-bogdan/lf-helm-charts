@@ -3,26 +3,12 @@ entries:
   lf-charts:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-10-08T22:43:48.278268+03:00"
+    created: "2023-10-08T23:01:38.025789+03:00"
     description: A Helm chart for Kubernetes
-    digest: ef3412f792d7c89c4f5abcf1d99d5dfa921aa9d451f6211ff1ac82fef05dd371
+    digest: 9a877b6b45c17be9e443524f874b3dff3f9759839f7e2f4e0e8b812ba74a4abd
     name: lf-charts
     type: application
     urls:
-    - https://github.com/p-bogdan/lf-helm-charts/lf-charts-0.1.0.tgz
+    - https://p-bogdan.github.io/lf-helm-charts/lf-charts-0.1.0.tgz
     version: 0.1.0
-  postgres:
-  - apiVersion: v2
-    appVersion: "13.2"
-    created: "2023-10-08T22:43:48.278721+03:00"
-    description: A Helm chart for PostgreSQL on Kubernetes, forked from groundhog2k2.
-    digest: 2a420730c250bf0f98a23282910965d61b1c007f99d2acc0d0fa77b22182e24f
-    maintainers:
-    - email: gouravshah@schoolofdevops.com
-      name: Gourav Shah
-    name: postgres
-    type: application
-    urls:
-    - https://github.com/p-bogdan/lf-helm-charts/postgres-0.2.11.tgz
-    version: 0.2.11
-generated: "2023-10-08T22:43:48.26913+03:00"
+generated: "2023-10-08T23:01:38.018468+03:00"
