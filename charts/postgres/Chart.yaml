@@ -1,6 +1,6 @@
 apiVersion: v2
 name: postgres
-description: A Helm chart for PostgreSQL on Kubernetes, forked from groundhog2k2. 
+description: A Helm chart for PostgreSQL on Kubernetes. 
 
 type: application
 
