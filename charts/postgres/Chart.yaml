@@ -5,8 +5,8 @@ description: A Helm chart for PostgreSQL on Kubernetes, forked from groundhog2k2
 type: application
 
 maintainers:
-  - name: Gourav Shah
-    email: gouravshah@schoolofdevops.com
+  - name: pbogdan
+    email: test@example.com
 
 version: 0.2.11
 

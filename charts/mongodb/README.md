@@ -7,8 +7,8 @@ A Helm chart for MongoDB on Kubernetes
 ## TL;DR
 
 ```bash
-$ helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-$ helm install my-release groundhog2k/mongodb
+$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
+$ helm install my-release lf-charts/mongodb
 ```
 
 ## Introduction
@@ -28,7 +28,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release groundhog2k/mongodb
+$ helm install my-release lf-charts/mongodb
 ```
 
 ## Uninstalling the Chart

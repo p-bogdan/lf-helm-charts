@@ -7,8 +7,8 @@ A Helm chart for Nextcloud on Kubernetes
 ## TL;DR
 
 ```bash
-$ helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-$ helm install my-release groundhog2k/nextcloud
+$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
+$ helm install my-release lf-charts/nextcloud
 ```
 
 ## Introduction
@@ -28,7 +28,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release groundhog2k/nextcloud
+$ helm install my-release lf-charts/nextcloud
 ```
 
 ## Upgrading the Chart[](#upgrade)
@@ -36,7 +36,7 @@ $ helm install my-release groundhog2k/nextcloud
 To upgrade the chart or Nextcloud version with the release name `my-release`:
 
 ```bash
-$ helm upgrade my-release groundhog2k/nextcloud
+$ helm upgrade my-release lf-charts/nextcloud
 ```
 
 ## Post-upgrade steps
@@ -47,7 +47,7 @@ The post upgrade can be started manually after the Nextcloud/chart upgrade (like
 In the latter case the postUpgradeHookDelay should be set to a higher value. (f.i. 120 seconds)
 
 ```bash
-$ helm upgrade my-release groundhog2k/nextcloud --set enablePostUpgradeHook=true,postUpgradeHookDelay=120
+$ helm upgrade my-release lf-charts/nextcloud --set enablePostUpgradeHook=true,postUpgradeHookDelay=120
 ```
 
 ## Uninstalling the Chart

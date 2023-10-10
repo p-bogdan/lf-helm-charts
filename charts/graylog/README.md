@@ -7,8 +7,8 @@ A Helm chart for Graylog on Kubernetes
 ## TL;DR
 
 ```bash
-$ helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-$ helm install my-release groundhog2k/graylog
+$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
+$ helm install my-release lf-charts/graylog
 ```
 
 ## Introduction
@@ -26,7 +26,7 @@ This chart uses the original [Graylog image from Docker Hub](https://hub.docker.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release groundhog2k/graylog
+$ helm install my-release lf-charts/graylog
 ```
 
 ## Uninstalling the Chart
