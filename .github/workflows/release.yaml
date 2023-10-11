@@ -34,6 +34,9 @@ jobs:
       #- name: Add dependencies
       #  run: |
       #    helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
+      - name: List current dir
+        run: |
+          ls -al
       - name: Run Release
         uses: helm/chart-releaser-action@v1.5.0
         env:
