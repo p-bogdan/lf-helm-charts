@@ -29,7 +29,7 @@ jobs:
         run: |
           helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
           ls -al
-          helm add repo lf-charts https://p-bogdan.github.io/lf-helm-charts
+          helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
           helm repo update
       #- name: Add dependencies
       #  run: |
