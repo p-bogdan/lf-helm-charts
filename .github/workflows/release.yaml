@@ -21,7 +21,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Packaging artifacts
-        run:
+        run: |
           helm package charts/*
           helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
       #- name: Add dependencies
