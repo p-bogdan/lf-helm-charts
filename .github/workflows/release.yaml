@@ -28,6 +28,7 @@ jobs:
       - name: Creating/Updating repo index
         run: |
           helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
+          ls -al
       #- name: Add dependencies
       #  run: |
       #    helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
