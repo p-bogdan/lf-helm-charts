@@ -23,7 +23,6 @@ jobs:
       - name: Packaging artifacts
         run:
           helm package charts/*
-          helm repo index --help
           helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
       #- name: Add dependencies
       #  run: |
