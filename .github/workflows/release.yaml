@@ -37,5 +37,8 @@ jobs:
       #    helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
       - name: Run Release
         uses: helm/chart-releaser-action@v1.5.0
+        with:
+          charts_dir: charts
+          skip_packaging: true
         env:
           CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
