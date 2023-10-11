@@ -24,7 +24,7 @@ The advantage is that most of these charts are platform independent and will run
 To add this repository to the helm configuration:
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts/
+$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
 ```
 
 ## Using this helm repository
