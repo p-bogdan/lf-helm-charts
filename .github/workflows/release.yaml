@@ -24,7 +24,7 @@ jobs:
         uses: azure/setup-helm@v3
       - name: Packaging artifacts
         run: |
-          helm package charts/*
+          helm package charts/
       - name: Creating/Updating repo index
         run: |
           helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
