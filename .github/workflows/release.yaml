@@ -31,14 +31,13 @@ jobs:
           ls -al
           helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
           helm repo update
-          ls -al /home/runner/.cache/helm
       #- name: Add dependencies
       #  run: |
       #    helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
       - name: Run Release
         uses: helm/chart-releaser-action@v1.5.0
-        #with:
+        with:
         #  charts_dir: charts
-          #skip_packaging: true
+          skip_packaging: true
         env:
           CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
