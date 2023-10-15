@@ -31,6 +31,7 @@ jobs:
           ls -al
           helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
           helm repo update
+          ls -al /home/runner/.cache/helm
       #- name: Add dependencies
       #  run: |
       #    helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
