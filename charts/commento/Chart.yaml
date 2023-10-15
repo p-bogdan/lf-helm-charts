@@ -14,6 +14,6 @@ appVersion: "v1.8.0"
 dependencies:
   - name: postgres
     version: 0.2.11
-    #repository: "https://p-bogdan.github.io/lf-helm-charts"
-    repository: "https://github.com/p-bogdan/lf-helm-charts/releases/download"
+    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    #repository: "https://github.com/p-bogdan/lf-helm-charts/releases/download"
     condition: postgres.enabled
