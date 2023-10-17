@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - "*"
     paths:
       - 'charts/**'
 
@@ -20,6 +22,20 @@ jobs:
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0.9.7
+      - name: Display SemVer
+        run: |
+          echo "SemVer: $GITVERSION_SEMVER" && echo "$version" && echo "$major.$minor.$patch"
+      - name: Create git tag
+        run: |
+          git tag $GITVERSION_SEMVER
+      - name: Push git tag
+        run: git push origin $GITVERSION_SEMVER
       - name: Install Helm
         uses: azure/setup-helm@v3
       - name: Packaging artifacts
