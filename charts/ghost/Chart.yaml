@@ -7,7 +7,7 @@ type: application
 maintainers:
   - name: p-bogdan
 
-version: "0.110.0"
+version: "0.110.1"
 
 appVersion: "5.69.0"
 
