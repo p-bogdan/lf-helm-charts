@@ -38,9 +38,9 @@ jobs:
         run: git push origin $GITVERSION_SEMVER
       - name: Install Helm
         uses: azure/setup-helm@v3
-      - name: Packaging artifacts
-        run: |
-          helm package charts/
+      # - name: Packaging artifacts
+      #   run: |
+      #     helm package charts/
       #  VERSION=
       #${VERSION:1}" >> GITHUB_ENV
       #rm -rf .cr-release-packages
