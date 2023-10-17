@@ -1,14 +1,18 @@
 # Graylog
 
-![Version: 0.1.14](https://img.shields.io/badge/Version-0.1.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.0.6](https://img.shields.io/badge/AppVersion-4.0.6-informational?style=flat-square)
+![Version: 0.6.10](https://img.shields.io/badge/Version-0.6.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.1.7](https://img.shields.io/badge/AppVersion-5.1.7-informational?style=flat-square)
+
+## Changelog
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Graylog on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/graylog
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/graylog
 ```
 
 ## Introduction
@@ -26,7 +30,7 @@ This chart uses the original [Graylog image from Docker Hub](https://hub.docker.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/graylog
+helm install my-release groundhog2k/graylog
 ```
 
 ## Uninstalling the Chart
@@ -34,15 +38,15 @@ $ helm install my-release lf-charts/graylog
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | mongodb | 0.2.10 |
-| @groundhog2k | elasticsearch | 0.1.1 |
+| @groundhog2k | mongodb | 0.5.19 |
+| @groundhog2k | elasticsearch | 0.1.106 |
 
 ## Common parameters
 
@@ -56,14 +60,18 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
+| image.registry | string | `"docker.io"` | Image registry |
 | image.repository | string | `"graylog/graylog"` | Image name |
 | image.tag | string | `""` | Image tag |
 | initImage.pullPolicy | string | `"IfNotPresent"` | Init container image pull policy |
-| initImage.repository | string | `"busybox"` | Default init container image |
+| initImage.registry | string | `"docker.io"` | Image registry |
+| initImage.repository | string | `"maxmindinc/geoipupdate"` | Default init container image |
 | initImage.tag | string | `"latest"` | Init container image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
+| startupProbe | object | `see values.yaml` | Startup probe configuration |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
 | readinessProbe | object | `see values.yaml` | Readiness probe configuration |
+| customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
 | customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
@@ -81,6 +89,10 @@ $ helm uninstall my-release
 | podManagementPolicy | string | `OrderedReady` | Pod management policy |
 | updateStrategyType | string | `RollingUpdate` | Update strategy |
 | replicaCount | int | `1` | Number of replicas (Not supported - Don't change in this chart version) |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
+| podDisruptionBudget | object | `{}` | Pod disruption budget |
+| podDisruptionBudget.minAvailable | int | `nil` | Minimum number of pods that must be available after eviction |
+| podDisruptionBudget.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after eviction |
 
 ## Service paramters
 
@@ -91,6 +103,7 @@ $ helm uninstall my-release
 | service.nodePort | int | `nil` | The http node port (only relevant for type LoadBalancer or NodePort) |
 | service.clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | service.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| service.annotations | object | `{}` | Additional service annotations |
 
 ## Extra service parameters
 
@@ -106,7 +119,7 @@ Section to define all additional UDP/TCP inputs for Graylog
 | extraServices[].nodePort | int | `nil` | The http node port (only relevant for type LoadBalancer or NodePort) |
 | extraServices[].clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | extraServices[].loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
-
+| extraServices[].annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -128,11 +141,11 @@ Section to define all additional UDP/TCP inputs for Graylog
 | externalDatabase.password | string | `nil` | External database user password |
 | mongodb.enabled | bool | `false` | Enable MongoDB deployment (will disable external database settings) |
 | mongodb.settings.rootUsername | string | `admin` | The root username |
-| mongodb.settings.rootPassword | string | `{}` | The root users password (Random value if not specified) |
+| mongodb.settings.rootPassword | string | `{}` | The root users password |
 | mongodb.userDatabase | object | `{}` | Optional MongoDB user database |
 | mongodb.userDatabase.name | string | `nil` | Name of the user database |
 | mongodb.userDatabase.user | string | `nil` | User name with full access to user database|
-| mongodb.userDatabase.password | string | `nil` | Password of created user (Random value if not specified) |
+| mongodb.userDatabase.password | string | `nil` | Password of created user |
 | mongodb.storage | object | `see values.yaml` | MongoDB storage settings |
 | elasticsearch.enabled | bool | `false` | Enable Elasticsearch deployment (will disable `elastic.hosts` setting) |
 | elasticsearch.javaOpts | string | `"-Xms512m -Xmx512m"` | Additional JVM options for Elasticsearch |
@@ -140,12 +153,13 @@ Section to define all additional UDP/TCP inputs for Graylog
 | elasticsearch.storage | object | `see values.yaml` | Elasticsearch storage settings |
 
 ## MaxMind GeoIP2 database
+
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | initGeoIPDatabase.enabled | bool | `false` | Enable GeoIP database download |
 | initGeoIPDatabase.accountId | string | `""` | MaxMind UserId / AccountId |
 | initGeoIPDatabase.licenseKey | string | `""` | MaxMind license key |
-| initGeoIPDatabase.editionId | string | `"GeoLite2-City"` | Default database edition id (https://www.maxmind.com/en/accounts/473747/geoip/downloads) |
+| initGeoIPDatabase.editionId | string | `"GeoLite2-City"` | Default database edition id - see [MaxMind page](https://www.maxmind.com/en/accounts/473747/geoip/downloads) |
 | initGeoIPDatabase.host | string | `""` | The MaxMind download host (not necessary to change that - default updates.maxmind.com)|
 | initGeoIPDatabase.proxy | string | `""` | A valid proxy if internet access is running through a proxy |
 | initGeoIPDatabase.proxyUserPassword | string | `""` | Proxy username and password in format "username:password" |
@@ -187,4 +201,4 @@ Section to define all additional UDP/TCP inputs for Graylog
 | settings.smtp.emailFrom | string | `"you@example.com"` | Mail from address |
 | settings.smtp.subjectPrefix | string | `"[graylog]"` | Mail subject prefix |
 
-Further Graylog parameter can be set via environment variables (see Deployment parameter: env)
+Further Graylog parameter can be set via environment variables (see Deployment parameter: `env:`)

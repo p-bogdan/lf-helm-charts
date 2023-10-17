@@ -1,13 +1,13 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingress.enabled }}
 {{- $fullName := include "graylog.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
-{{- $kubeVersion := .Capabilities.KubeVersion.Version -}}
-{{- if semverCompare ">=1.19" $kubeVersion -}}
+{{- $apiVersion := .Capabilities.APIVersions -}}
+{{- if $apiVersion.Has "networking.k8s.io/v1" }}
 apiVersion: networking.k8s.io/v1
-{{- else -}}
-{{- if semverCompare ">=1.14" $kubeVersion -}}
+{{- else }}
+{{- if $apiVersion.Has "networking.k8s.io/v1beta1" }}
 apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- else }}
 apiVersion: extensions/v1beta1
 {{- end }}
 {{- end }}
@@ -38,14 +38,14 @@ spec:
         paths:
           {{- range .paths }}
           - path: {{ . }}
-            {{- if semverCompare ">=1.19" $kubeVersion }}
+            {{- if $apiVersion.Has "networking.k8s.io/v1" }}
             pathType: ImplementationSpecific
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-            {{- else -}}
+            {{- else }}
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $svcPort }}

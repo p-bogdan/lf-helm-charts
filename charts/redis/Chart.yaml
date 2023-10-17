@@ -5,10 +5,10 @@ description: A Helm chart for Redis on Kubernetes
 type: application
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
 # This is the chart version
-version: 0.3.1
+version: "0.7.2"
 
 # This is the version number of the application being deployed.
-appVersion: "6.2.1"
+appVersion: "7.2.1"

@@ -1,4 +1,9 @@
+{{- $apiVersion := .Capabilities.APIVersions -}}
+{{- if $apiVersion.Has "batch/v1" }}
 apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
 kind: Job
 metadata:
   name: {{ include "gitea.fullname" . }}-postinstall
@@ -17,7 +22,7 @@ spec:
         - name: {{ .Chart.Name }}-postinstall
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - secretRef:

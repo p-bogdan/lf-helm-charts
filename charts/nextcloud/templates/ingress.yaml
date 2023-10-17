@@ -1,15 +1,15 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingress.enabled }}
 {{- $fullName := include "nextcloud.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- $maxSize := .Values.ingress.maxBodySize -}}
 {{- $webroot := .Values.settings.overwriteWebRoot -}}
-{{- $kubeVersion := .Capabilities.KubeVersion.Version -}}
-{{- if semverCompare ">=1.19" $kubeVersion -}}
+{{- $apiVersion := .Capabilities.APIVersions -}}
+{{- if $apiVersion.Has "networking.k8s.io/v1" }}
 apiVersion: networking.k8s.io/v1
-{{- else -}}
-{{- if semverCompare ">=1.14" $kubeVersion -}}
+{{- else }}
+{{- if $apiVersion.Has "networking.k8s.io/v1beta1" }}
 apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- else }}
 apiVersion: extensions/v1beta1
 {{- end }}
 {{- end }}
@@ -47,14 +47,14 @@ spec:
           {{- else }}
           - path: /
           {{- end }}
-            {{- if semverCompare ">=1.19" $kubeVersion }}
+            {{- if $apiVersion.Has "networking.k8s.io/v1" }}
             pathType: ImplementationSpecific
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-            {{- else -}}
+            {{- else }}
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $svcPort }}
@@ -63,12 +63,12 @@ spec:
 
 ---
 
-{{- if semverCompare ">=1.19" $kubeVersion -}}
+{{- if $apiVersion.Has "networking.k8s.io/v1" }}
 apiVersion: networking.k8s.io/v1
-{{- else -}}
-{{- if semverCompare ">=1.14" $kubeVersion -}}
+{{- else }}
+{{- if $apiVersion.Has "networking.k8s.io/v1beta1" }}
 apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- else }}
 apiVersion: extensions/v1beta1
 {{- end }}
 {{- end }}
@@ -100,7 +100,7 @@ spec:
           {{- else }}
           - path: /.well-known/ca(l|rd)dav(/|.*)
           {{- end }}
-            {{- if semverCompare ">=1.19" $kubeVersion }}
+            {{- if $apiVersion.Has "networking.k8s.io/v1" }}
             pathType: ImplementationSpecific
             backend:
               service:

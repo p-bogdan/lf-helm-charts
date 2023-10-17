@@ -5,8 +5,8 @@ description: A Helm chart for MariaDB on Kubernetes
 type: application
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
-version: 0.2.10
+version: "0.10.0"
 
-appVersion: "10.5.9"
+appVersion: "11.1.2"

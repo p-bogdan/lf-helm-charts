@@ -1,14 +1,20 @@
 # Ghost
 
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.2.1](https://img.shields.io/badge/AppVersion-4.2.1-informational?style=flat-square)
+![Version: 0.110.0](https://img.shields.io/badge/Version-0.110.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.69.0](https://img.shields.io/badge/AppVersion-5.69.0-informational?style=flat-square)
+
+## Changelog
+
+### ⚠️ An upgrade to Ghost 4.46.x, Ghost 4.47.x or Ghost 4.48.x with MariaDB as database will fail - Upgrading to Ghost 5.0.0 with MariaDB as database backend works only with Ghost >=4.46.2 - Using MySQL as database backend is highly recommended and will support the full upgrade path
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Ghost blog on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/ghost
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/ghost
 ```
 
 ## Introduction
@@ -28,7 +34,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/ghost
+helm install my-release groundhog2k/ghost
 ```
 
 ## Uninstalling the Chart
@@ -36,14 +42,15 @@ $ helm install my-release lf-charts/ghost
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | mariadb | 0.2.10 |
+| @groundhog2k | mariadb | 0.2.28 |
+| @groundhog2k | mysql | 0.2.0 |
 
 ## Common parameters
 
@@ -57,12 +64,15 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
+| image.registry | string | `"docker.io"` | Image registry |
 | image.repository | string | `"ghost"` | Image name |
 | image.tag | string | `""` | Image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | strategy | object | `{}` | Pod deployment strategy |
+| startupProbe | object | `see values.yaml` | Startup probe configuration |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
 | readinessProbe | object | `see values.yaml` | Readiness probe configuration |
+| customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
 | customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
@@ -78,6 +88,7 @@ $ helm uninstall my-release
 | serviceAccount.annotations | object | `{}` | Additional service account annotations |
 | affinity | object | `{}` | Affinity for pod assignment |
 | tolerations | list | `[]` | Tolerations for pod assignment |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
 
 ## Service paramters
 
@@ -88,6 +99,7 @@ $ helm uninstall my-release
 | service.nodePort | int | `nil` | The node port (only relevant for type LoadBalancer or NodePort) |
 | service.clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | service.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| service.annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -108,6 +120,7 @@ $ helm uninstall my-release
 | storage.persistentVolumeClaimName | string | `nil` | PVC name when existing storage volume should be used |
 | storage.requestedSize | string | `nil` | Size for new PVC, when no existing PVC is used |
 | storage.className | string | `nil` | Storage class name |
+| storage.keepPvc | bool | `false` | Keep a created Persistent volume claim when uninstalling the helm chart |
 
 ## Ghost parameters
 
@@ -118,14 +131,22 @@ $ helm uninstall my-release
 | mariadb.userDatabase.name | string | `nil` | Name of the Ghost database |
 | mariadb.userDatabase.user | string | `nil` | User name with full access to ghost database |
 | mariadb.userDatabase.password | string | `nil` | Password of the ghost database user |
-| mariadb.storage | string | `nil` | MariaDB storage parameter (see storage parameters) |
-| externalDatabase.host | string | `nil` | External database host |
-| externalDatabase.name | string | `"ghost"` | External database name |
+| mysql.storage | string | `nil` | MySQL storage parameter (see storage parameters) |
+| mysql.enabled | bool | `false` | Enables MySQL deployment (and switches off externalDatabase section) |
+| mysql.settings.rootPassword | string | `nil` | MySQL root password |
+| mysql.userDatabase.name | string | `nil` | Name of the Ghost database |
+| mysql.userDatabase.user | string | `nil` | User name with full access to ghost database |
+| mysql.userDatabase.password | string | `nil` | Password of the ghost database user |
+| mysql.storage | string | `nil` | MySQL storage parameter (see storage parameters) |
 | externalDatabase.type | string | `"sqlite"` | External database type (mysql or mariadb - default: sqlite) |
-| externalDatabase.user | string | `nil` | External database user |
-| externalDatabase.password | string | `nil` | External database password |
+| externalDatabase.sqliteDatabaseFile | string | `"content/data/ghost.db"` | Path to default SQLite database (only sqlite) |
+| externalDatabase.host | string | `nil` | External database host (only mysql/mariadb) |
+| externalDatabase.name | string | `"ghost"` | External database name (only mysql/mariadb) |
+| externalDatabase.user | string | `nil` | External database user (only mysql/mariadb) |
+| externalDatabase.password | string | `nil` | External database password (only mysql/mariadb) |
 | settings.mode | string | `"production"` | Ghost mode (production or development) |
 | settings.url | string | `nil` | URL of Ghost blog |
+| settings.logToStdout | bool | `true`| Log to stdout by default (otherwise logging will go to stdout and file) |
 | settings.mail.from | string | `nil` | Mail from address |
 | settings.mail.transport | string | `SMTP` | Mail transport type (SMTP, Sendmail, Direct) |
 | settings.mail.host | string | `nil` | Mail host for transport |

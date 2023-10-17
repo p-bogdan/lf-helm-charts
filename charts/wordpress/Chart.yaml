@@ -3,18 +3,18 @@ name: wordpress
 description: A Helm chart for Wordpress on Kubernetes
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
 type: application
 
 # This is the chart version.
-version: 0.3.1
+version: "0.9.2"
 
 # This is the version number of the application being deployed.
-appVersion: "5.7.0-apache"
+appVersion: "6.3.2-apache"
 
 dependencies:
   - name: mariadb
-    version: 0.2.10
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.3.14"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: mariadb.enabled

@@ -1,14 +1,18 @@
-#  Nextcloud
+# Nextcloud
 
-![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 21.0.1-apache](https://img.shields.io/badge/AppVersion-21.0.1-informational?style=flat-square)
+![Version: 0.15.2](https://img.shields.io/badge/Version-0.15.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 27.1.2-apache](https://img.shields.io/badge/AppVersion-27.1.2-informational?style=flat-square)
+
+## Changelog
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Nextcloud on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/nextcloud
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/nextcloud
 ```
 
 ## Introduction
@@ -28,7 +32,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/nextcloud
+helm install my-release groundhog2k/nextcloud
 ```
 
 ## Upgrading the Chart[](#upgrade)
@@ -36,35 +40,51 @@ $ helm install my-release lf-charts/nextcloud
 To upgrade the chart or Nextcloud version with the release name `my-release`:
 
 ```bash
-$ helm upgrade my-release lf-charts/nextcloud
+helm upgrade my-release groundhog2k/nextcloud
 ```
 
 ## Post-upgrade steps
 
-After some Nextcloud version upgrades it's necessary to update database indicies of Nextcloud too. Therefor an optional post-upgrade step was prepared in this helm chart.
+After some Nextcloud version upgrades it's necessary to update database indicies of Nextcloud too. Therefor an  post-upgrade step was prepared in this helm chart.
 
-The post upgrade can be started manually after the Nextcloud/chart upgrade (like described in ['Upgrading the chart'](#upgrade) section) or both can be done in one step.
-In the latter case the postUpgradeHookDelay should be set to a higher value. (f.i. 120 seconds)
+The post upgrade will be started during the Nextcloud/chart upgrade after a delay, which is configurable by setting `postUpgradeHook.delay`. The default value is 30 seconds.
 
 ```bash
-$ helm upgrade my-release lf-charts/nextcloud --set enablePostUpgradeHook=true,postUpgradeHookDelay=120
+helm upgrade my-release groundhog2k/nextcloud --set postUpgradeHook.delay=120
 ```
+
+## Custom *.config.php files
+
+The chart supports adding [multiple Nextcloud configuration files](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#multiple-config-php-file) by setting file name and value in the `customConfigs:` section.
+
+Example:
+
+```helm
+customConfigs:
+  region.config.php: |
+    <?php
+    $CONFIG = array (
+      'default_phone_region' => 'DE',
+    );
+```
+
+The custom *.config.php files will be copied during a post-install/upgrade hook that can be configured by `customConfigsHook:` section.
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | mariadb | 0.2.10 |
-| @groundhog2k | postgres | 0.2.9 |
-| @groundhog2k | redis | 0.3.1 |
+| @groundhog2k | mariadb | 0.3.14 |
+| @groundhog2k | postgres | 0.4.6 |
+| @groundhog2k | redis | 0.6.14 |
 
 ## Common parameters
 
@@ -78,14 +98,17 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
+| image.registry | string | `"docker.io"` | Image registry |
 | image.repository | string | `"nextcloud"` | Image name |
 | image.tag | string | `""` | Image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | strategy.type | object | `"RollingUpdate"` | Pod deployment strategy |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
 | startupProbe | object | `see values.yaml` | Startup probe configuration |
+| readinessProbe | object | `see values.yaml` | Readiness probe configuration |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
 | customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
+| customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
 | nodeSelector | object | `{}` | Deployment node selector |
 | podAnnotations | object | `{}` | Additional pod annotations |
@@ -101,11 +124,19 @@ $ helm uninstall my-release
 | containerPort | int | `8000` | Internal http container port |
 | replicaCount | int | `1` | Number of replicas |
 | initImage.pullPolicy | string | `"IfNotPresent"` | Init container image pull policy |
+| initImage.registry | string | `"docker.io"` | Image registry |
 | initImage.repository | string | `"busybox"` | Default init container image |
 | initImage.tag | string | `"latest"` | Init container image tag |
-| postUpgradeHook | bool | `false` | Enable post upgrade hook |
-| postUpgradeHookDelay | int | `10` | Delay in seconds before post-upgrade steps are initiated |
+| postUpgradeHook.enabled | bool | `true` | Enable post upgrade hook |
+| postUpgradeHook.delay | int | `30` | Delay in seconds before post-upgrade steps are initiated |
 | postUpgradeSteps | list | `see values.yaml` | Script with post upgrade steps |
+| customConfigsHook.enabled | bool | `true` | Enable custom configuration copy hook |
+| customConfigsHook.waitBeforeRetry | int | 10 | Delay before retrying to copy *.config.php files |
+| customConfigsHook.retries | int | 10 | Max. number of retries before job fails |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
+| podDisruptionBudget | object | `{}` | Pod disruption budget |
+| podDisruptionBudget.minAvailable | int | `nil` | Minimum number of pods that must be available after eviction |
+| podDisruptionBudget.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after eviction |
 
 ## Cron jobs
 
@@ -133,6 +164,7 @@ $ helm uninstall my-release
 | service.nodePort | int | `nil` | The node port (only relevant for type LoadBalancer or NodePort) |
 | service.clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | service.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| service.annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -142,7 +174,7 @@ $ helm uninstall my-release
 | ingress.annotations | string | `nil` | Additional annotations for ingress |
 | ingress.hosts[0].host | string | `""` | Hostname for the ingress endpoint |
 | ingress.tls | list | `[]` | Ingress TLS parameters |
-| ingress.maxBodySize | string | `"64m"` | Maximum body size for post requests |
+| ingress.maxBodySize | string | `"512m"` | Maximum body size for post requests |
 
 ## Redis session cache
 
@@ -186,11 +218,11 @@ $ helm uninstall my-release
 | apacheDefaultSiteConfig | string | `nil` | Overwrite default apache 000-default.conf |
 | apachePortsConfig | string | `nil` | Overwrite default apache ports.conf |
 | customPhpConfig | string | `nil` | Additional PHP custom.ini |
-| memoryLimitConfig | string | `nil` | Additional PHP memory-limit.ini |
+| customConfigs | object | `nil` | Custom nextcloud *.config.php files that will be copied when customConfigHook is enabled (see example in `values.yaml`) |
 | settings.admin.name | string | `nil` | Nextcloud administrator user |
 | settings.admin.password | string | `nil` | Nextcloud admin user password |
 | settings.update | bool | `false` | Enable update (Only necessary if custom command is used) |
-| settings.maxFileUploadSize | string | `64M` | Maximum file upload size |
+| settings.maxFileUploadSize | string | `512M` | Maximum file upload size |
 | settings.memoryLimit | string | `512M` | PHP memory limit |
 | settings.disableRewriteIP | bool | `false` | Disable rewriting IP address |
 | settings.trustedDomains | string | `""` | List of trusted domains separated by blank space |
@@ -214,8 +246,10 @@ $ helm uninstall my-release
 | storage.nextcloud.persistentVolumeClaimName | string | `nil` | PVC name when existing storage volume should be used |
 | storage.nextcloud.requestedSize | string | `nil` | Size for new PVC, when no existing PVC is used |
 | storage.nextcloud.className | string | `nil` | Storage class name |
+| storage.nextcloud.keepPvc | bool | `false` | Keep a created Persistent volume claim when uninstalling the helm chart |
 | storage.nextcloudData | object | `{}` | Nextcloud user data storage |
 | storage.nextcloudData.accessModes[0] | string | `"ReadWriteOnce"` | Storage access mode |
 | storage.nextcloudData.persistentVolumeClaimName | string | `nil` | PVC name when existing storage volume should be used |
 | storage.nextcloudData.requestedSize | string | `nil` | Size for new PVC, when no existing PVC is used |
 | storage.nextcloudData.className | string | `nil` | Storage class name |
+| storage.nextcloudData.keepPvc | bool | `false` | Keep a created Persistent volume claim when uninstalling the helm chart |

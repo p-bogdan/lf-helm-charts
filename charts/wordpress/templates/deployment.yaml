@@ -6,6 +6,9 @@ metadata:
     {{- include "wordpress.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- if .Values.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "wordpress.selectorLabels" . | nindent 6 }}
@@ -33,17 +36,29 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.extraInitContainers }}
+      initContainers:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - secretRef:
                 name: {{ include "wordpress.fullname" . }}
+          {{- range .Values.extraEnvSecrets }}
+            - secretRef:
+                name: {{ . }}
+          {{- end }}
+          {{- range .Values.extraEnvConfigs }}
+            - configMapRef:
+                name: {{ . }}
+          {{- end }}
           {{- with .Values.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -58,6 +73,29 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPort }}
               protocol: TCP
+          {{- if .Values.customStartupProbe }}
+          startupProbe:
+            {{- toYaml .Values.customStartupProbe | nindent 12 }}
+          {{- else }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /wp-login.php
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost:{{ .Values.containerPort  }}
+                - name: x-forwarded-proto
+                  value: https
+          {{- with .Values.startupProbe }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            failureThreshold: {{ .failureThreshold }}
+            successThreshold: {{ .successThreshold }}
+            periodSeconds: {{ .periodSeconds }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe:
             {{- toYaml .Values.customLivenessProbe | nindent 12 }}
@@ -70,6 +108,8 @@ spec:
               httpHeaders:
                 - name: Host
                   value: localhost:{{ .Values.containerPort  }}
+                - name: x-forwarded-proto
+                  value: https
           {{- with .Values.livenessProbe }}
             initialDelaySeconds: {{ .initialDelaySeconds }}
             timeoutSeconds: {{ .timeoutSeconds }}
@@ -91,6 +131,8 @@ spec:
               httpHeaders:
                 - name: Host
                   value: localhost:{{ .Values.containerPort  }}
+                - name: x-forwarded-proto
+                  value: https
           {{- with .Values.readinessProbe }}
             initialDelaySeconds: {{ .initialDelaySeconds }}
             timeoutSeconds: {{ .timeoutSeconds }}
@@ -119,7 +161,14 @@ spec:
               name: extended
             - mountPath: /usr/local/etc/php/conf.d/custom.ini
               subPath: custom.ini
-              name: extended              
+              name: extended
+            {{- range $secret := .Values.extraSecrets }}
+            - mountPath: {{ $secret.mountPath }}
+              name: {{ $secret.name }}
+            {{- end }}
+      {{- with .Values.extraContainers }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -140,6 +189,12 @@ spec:
         - name: extended
           configMap:
             name: {{ include "wordpress.fullname" . }}-extended
+        {{- range $secret := .Values.extraSecrets }}
+        - name: {{ $secret.name }}
+          secret:
+            secretName: {{ $secret.name }}
+            defaultMode: 0440
+        {{- end }}
         - name: wordpress-vol
         {{- if .Values.storage.persistentVolumeClaimName }}
           persistentVolumeClaim:

@@ -2,7 +2,8 @@
 
 ## Ghost docker image
 image:
-  repository: ghost
+  registry: "docker.io"
+  repository: "ghost"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -49,6 +50,8 @@ service:
   clusterIP:
   ## The loadbalancer ip address (only relevant for type LoadBalancer)
   loadBalancerIP:
+  # Annotations to add to the service
+  annotations: {}
 
 ## Ingress configuration
 ingress:
@@ -91,6 +94,21 @@ tolerations: []
 
 affinity: {}
 
+## Maximum number of revisions maintained in revision history
+revisionHistoryLimit:
+
+## Custom startup probe (overwrites default startup probe)
+customStartupProbe: {}
+
+## Default startup probe
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+  periodSeconds: 10
+
 ## Custom liveness probe (overwrites default liveness probe)
 customLivenessProbe: {}
 
@@ -125,25 +143,31 @@ externalDatabase:
   ## Type of database ("mysql" or "mariadb" - default: sqlite)
   type: sqlite
 
+  ## Path to default SQLite database (only sqlite)
+  sqliteDatabaseFile: "content/data/ghost.db"
+
   ## Name of the database (default: ghost)
   name: ghost
 
-  ## Database user (only mysql)
+  ## Database user (only mysql/mariadb)
   user:
 
-  ## Database password (only mysql)
+  ## Database password (only mysql/mariadb)
   password:
 
-  ## Database host (only for mysql)
+  ## Database host (only for mysql/mariadb)
   host:
 
-  ## Database port (only for mysql)
+  ## Database port (only for mysql/mariadb)
   port:
 
 ## Ghost specific configuration
 settings:
   ## Default URL (for generated links)
   url:
+
+  ## Log to stdout only (default) - otherwise logging will go to stdout and file
+  logToStdout: true
 
   ## Environment mode (development or production - default: production)
   mode: production
@@ -173,6 +197,9 @@ storage:
   accessModes:
     - ReadWriteOnce
 
+  ## Keep a created Persistent volume claim when uninstalling the helm chart
+  keepPvc: false
+
 ## MariaDB configuration
 mariadb:
   ## Enable MariaDB helm chart for deployment (default: false)
@@ -180,7 +207,7 @@ mariadb:
 
   ## Database settings
   settings:
-    ## The root user password (default: a 10 char. alpahnumerical random password will be generated)
+    ## The root user password
     rootPassword:
 
   ## Optional user database which is created during first startup with user and password
@@ -189,7 +216,26 @@ mariadb:
     # name:
     ## Database user with full access rights
     # user:
-    ## Password of the database user (default: a 10 char. alpahnumerical random password will be generated)
+    ## Password of the database user
+    # password:
+
+## MySQL configuration
+mysql:
+  ## Enable MySQL helm chart for deployment (default: false)
+  enabled: false
+
+  ## Database settings
+  settings:
+    ## The root user password
+    rootPassword:
+
+  ## Optional user database which is created during first startup with user and password
+  userDatabase: {}
+    ## Name of the user database
+    # name:
+    ## Database user with full access rights
+    # user:
+    ## Password of the database user
     # password:
 
   # Storage parameters

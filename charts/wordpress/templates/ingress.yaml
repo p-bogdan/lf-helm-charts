@@ -1,14 +1,14 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingress.enabled }}
 {{- $fullName := include "wordpress.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 {{- $maxSize := .Values.ingress.maxBodySize -}}
-{{- $kubeVersion := .Capabilities.KubeVersion.Version -}}
-{{- if semverCompare ">=1.19" $kubeVersion -}}
+{{- $apiVersion := .Capabilities.APIVersions -}}
+{{- if $apiVersion.Has "networking.k8s.io/v1" }}
 apiVersion: networking.k8s.io/v1
-{{- else -}}
-{{- if semverCompare ">=1.14" $kubeVersion -}}
+{{- else }}
+{{- if $apiVersion.Has "networking.k8s.io/v1beta1" }}
 apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- else }}
 apiVersion: extensions/v1beta1
 {{- end }}
 {{- end }}
@@ -39,15 +39,15 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ . }}
-            {{- if semverCompare ">=1.19" $kubeVersion }}
-            pathType: ImplementationSpecific
+          - path: {{ .path }}
+            {{- if $apiVersion.Has "networking.k8s.io/v1" }}
+            pathType: {{ .pathType }}
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-            {{- else -}}
+            {{- else }}
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $svcPort }}

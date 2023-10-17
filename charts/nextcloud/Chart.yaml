@@ -5,24 +5,24 @@ description: A Helm chart for Nextcloud on Kubernetes
 type: application
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
 # This is the chart version.
-version: 0.5.3
+version: "0.15.2"
 
 # This is the version number of the application being deployed.
-appVersion: "21.0.1-apache"
+appVersion: "27.1.2-apache"
 
 dependencies:
   - name: mariadb
-    version: 0.2.10
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.3.14"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: mariadb.enabled
   - name: postgres
-    version: 0.2.9
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.4.6"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: postgres.enabled
   - name: redis
-    version: 0.3.1
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.6.14"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: redis.enabled

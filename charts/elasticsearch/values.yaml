@@ -21,10 +21,11 @@ serviceAccount:
 
 podAnnotations: {}
 
-## Management policy, update strategy and number of replicas
+## Pod management policy
 podManagementPolicy: OrderedReady
+
+## Pod update strategy
 updateStrategyType: RollingUpdate
-replicaCount: 1
 
 podSecurityContext:
   fsGroup: 1000
@@ -50,6 +51,8 @@ service:
   clusterIP:
   ## The loadbalancer ip address (only relevant for type LoadBalancer)
   loadBalancerIP:
+  # Annotations to add to the service
+  annotations: {}
 
 ## Ingress configuration
 ingress:
@@ -88,6 +91,20 @@ tolerations: []
 
 affinity: {}
 
+## Maximum number of revisions maintained in revision history
+revisionHistoryLimit:
+
+## Custom startup probe (overwrites default startup probe)
+customStartupProbe: {}
+
+## Default startup probe
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+  periodSeconds: 10
 
 ## Custom liveness probe (overwrites default liveness probe)
 customLivenessProbe: {}

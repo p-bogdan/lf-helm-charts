@@ -2,13 +2,11 @@
 
 ## Gitea docker image
 image:
-  repository: gitea/gitea
+  registry: "docker.io"
+  repository: "gitea/gitea"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
-
-## Number of replicas
-replicaCount: 1
 
 ## Pull secrets and name override options
 imagePullSecrets: []
@@ -16,7 +14,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 ## Pod deployment strategy
-strategy: {}
+strategy:
+  type: Recreate
 
 ## Optional service account
 serviceAccount:
@@ -55,6 +54,8 @@ services:
     clusterIP:
     ## The loadbalancer ip address (only relevant for type LoadBalancer)
     loadBalancerIP:
+    # Annotations to add to the http service
+    annotations: {}
   ssh:
     type: ClusterIP
     port: 22
@@ -64,6 +65,8 @@ services:
     clusterIP:
     ## The loadbalancer ip address (only relevant for type LoadBalancer)
     loadBalancerIP:
+    # Annotations to add to the ssh service
+    annotations: {}
 
 ## Ingress configuration
 ingress:
@@ -97,6 +100,18 @@ resources: {}
 #   cpu: 100m
 #   memory: 128Mi
 
+## Custom startup probe (overwrites default startup probe)
+customStartupProbe: {}
+
+## Default startup check
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+  periodSeconds: 10
+
 ## Custom liveness probe (overwrites default liveness probe)
 customLivenessProbe: {}
 
@@ -128,6 +143,9 @@ tolerations: []
 
 affinity: {}
 
+## Maximum number of revisions maintained in revision history
+revisionHistoryLimit:
+
 ## Internal container HTTP port (default: 8000)
 containerHttpPort: 8000
 ## Internal container SSH port (default: 8022)
@@ -138,6 +156,40 @@ env: []
 
 ## Arguments for the container entrypoint process
 args: []
+
+## Falls back to internal SQLite when no database is configured
+fallbackToSqlite: true
+
+## External database settings (is used when mariadb.enabled is false and postgres.enabled is false)
+externalDatabase:
+  ## Enable usage of external database (Default: disabled)
+  enabled: false
+
+  ## Type of database ("mysql", "postgres" are supported)
+  type:
+
+  ## Database charset to use (only relevant for mysql/mariadb)
+  charset: "utf8mb4"
+
+  ## Name of the database
+  name:
+
+  ## Database user
+  user:
+
+  ## Database password
+  password:
+
+  ## Database host (and optional port)
+  host:
+
+## External redis cache settings
+externalCache:
+  ## Enable usage of redis as session storage and cache (Default: disabled)
+  enabled: false
+
+  ## Redis host and port (host:port)
+  host:
 
 ## Additional Gitea settings defined in this chart
 settings:
@@ -161,15 +213,19 @@ gitea:
 
     log:
       ROOT_PATH: "/data/log"
-      MODE: "file"
+      MODE: "console"
       LEVEL: "info"
+      ACCESS: "console"
+      ENABLE_ACCESS_LOG: "false"
+    
+    lfs:
+      PATH: "/data/gitea/lfs"
 
     server:
       PROTOCOL: http
       DISABLE_SSH: "false"
       START_SSH_SERVER: "true"
       LFS_START_SERVER: "true"
-      LFS_CONTENT_PATH: "/data/gitea/lfs"
       OFFLINE_MODE: "false"
       # LFS JWT secret
       LFS_JWT_SECRET:
@@ -217,13 +273,6 @@ gitea:
       # USER:
       # PASSWD:
 
-    # Indexer prevents scaling Gitea with replicas option and instances (>1) will crash - as a workaround the indexer STARTUP_TIMEOUT can be set to infinite
-    # This workaround is working but not fully tested
-    # Session cache must enabled and database must be MySQL/MariaDB or PostgreSQL!
-    # Try at your own risk!
-    # indexer:
-      # STARTUP_TIMEOUT: 0
-
 ## Gitea storage parameters
 storage:
   ## Set persistentVolumenClaimName to reference an existing PVC
@@ -239,6 +288,9 @@ storage:
   accessModes:
     - ReadWriteOnce
 
+  ## Keep a created Persistent volume claim when uninstalling the helm chart
+  keepPvc: false
+
 ## MariaDB configuration
 mariadb:
   ## Enable MariaDB helm chart for deployment (default: false)
@@ -251,7 +303,7 @@ mariadb:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
 
-    ## The root user password (default: a 10 char. alpahnumerical random password will be generated)
+    ## The root user password
     rootPassword:
 
   ## Optional user database which is created during first startup with user and password
@@ -260,7 +312,7 @@ mariadb:
     # name:
     ## Database user with full access rights
     # user:
-    ## Password of the database user (default: a 10 char. alpahnumerical random password will be generated)
+    ## Password of the database user
     # password:
 
   # Storage parameters
@@ -282,7 +334,7 @@ postgres:
   ## Database configuration
   settings:
 
-    ## The superuser password (default: a 10 char. alpahnumerical random password will be generated)
+    ## The superuser password
     superuserPassword:
 
   ## User database which is created during first startup with user and password
@@ -291,7 +343,7 @@ postgres:
     # name:
     ## Database user
     # user:
-    ## Database password (default: 10 alphanum. random characters)
+    ## Database password
     # password:
 
   # Storage parameters

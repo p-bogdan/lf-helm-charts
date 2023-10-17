@@ -5,18 +5,18 @@ description: A Helm chart for Graylog on Kubernetes
 type: application
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
-version: 0.1.14
+version: "0.6.10"
 
-appVersion: "4.0.6"
+appVersion: "5.1.7"
 
 dependencies:
   - name: mongodb
-    version: 0.2.10
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.5.19"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: mongodb.enabled
   - name: elasticsearch
-    version: 0.1.1
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.1.106"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: elasticsearch.enabled

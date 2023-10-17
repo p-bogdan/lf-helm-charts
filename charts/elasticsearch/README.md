@@ -1,14 +1,24 @@
 # Elasticsearch
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 7.12.0](https://img.shields.io/badge/AppVersion-7.12.0-informational?style=flat-square)
+# ⚠️ Deprecation and Archive Notice
+
+This chart version (v0.8.2) is the last update and the chart is deprecated and will no longer be maintained.
+
+Please use the original Elasticsearch helm chart at [https://github.com/elastic/helm-charts](https://github.com/elastic/helm-charts)
+
+![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+
+## Changelog
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Elasticsearch on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/elasticsearch
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/elasticsearch
 ```
 
 ## Introduction
@@ -32,7 +42,7 @@ The actual chart version only supports a single-node Elasticsearch cluster (repl
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/elasticsearch
+helm install my-release groundhog2k/elasticsearch
 ```
 
 ## Uninstalling the Chart
@@ -40,7 +50,7 @@ $ helm install my-release lf-charts/elasticsearch
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Common parameters
@@ -55,11 +65,13 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"elasticsearch"` | Image name |
+| image.repository | string | `"docker.elastic.co/elasticsearch/elasticsearch"` | Image name |
 | image.tag | string | `""` | Image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
+| startupProbe | object | `see values.yaml` | Startup probe configuration |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
 | readinessProbe | object | `see values.yaml` | Readiness probe configuration |
+| customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
 | customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
@@ -76,7 +88,7 @@ $ helm uninstall my-release
 | tolerations | list | `[]` | Pod tolerations |
 | podManagementPolicy | string | `OrderedReady` | Pod management policy |
 | updateStrategyType | string | `RollingUpdate` | Update strategy |
-| replicaCount | int | `1` | Number of replicas (Not supported - Don't change in this chart version) |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
 
 ## Service paramters
 
@@ -89,6 +101,7 @@ $ helm uninstall my-release
 | service.transportNodePort | int | `nil` | The transport node port (only relevant for type LoadBalancer or NodePort) |
 | service.clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | service.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| service.annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -117,4 +130,4 @@ $ helm uninstall my-release
 | settings.javaOpts | string | `-Xms512m -Xmx512m` | Additional JVM options |
 | settings.clusterName | string | `singlenode-cluster` | Cluster name |
 
-Further Elasticsearch parameter can be set via environment variables (see Deployment parameter: env)
+Further Elasticsearch parameters can be set via environment variables (see Deployment parameter: env)

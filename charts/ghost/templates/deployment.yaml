@@ -6,6 +6,9 @@ metadata:
     {{- include "ghost.labels" . | nindent 4 }}
 spec:
   replicas: 1
+  {{- if .Values.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "ghost.selectorLabels" . | nindent 6 }}
@@ -38,7 +41,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -51,6 +54,10 @@ spec:
             {{- if .Values.settings.url }}
             - name: url
               value: {{ .Values.settings.url | quote }}
+            {{- end }}
+            {{- if .Values.settings.logToStdout }}
+            - name: logging__transports
+              value: "[\"stdout\"]"
             {{- end }}
             {{- with .Values.settings.mail }}
             {{- if .from }}
@@ -77,6 +84,31 @@ spec:
           {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe:
+            {{- toYaml .Values.customStartupProbe | nindent 12 }}
+          {{- else }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost:2368
+                {{- if hasPrefix "https" (default "" .Values.settings.url) }}
+                - name: x-forwarded-proto
+                  value: https
+                {{- end }}
+          {{- with .Values.startupProbe }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            failureThreshold: {{ .failureThreshold }}
+            successThreshold: {{ .successThreshold }}
+            periodSeconds: {{ .periodSeconds }}                
+          {{- end }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe:
             {{- toYaml .Values.customLivenessProbe | nindent 12 }}
@@ -89,6 +121,10 @@ spec:
               httpHeaders:
                 - name: Host
                   value: localhost:2368
+                {{- if hasPrefix "https" (default "" .Values.settings.url) }}
+                - name: x-forwarded-proto
+                  value: https
+                {{- end }}
           {{- with .Values.livenessProbe }}
             initialDelaySeconds: {{ .initialDelaySeconds }}
             timeoutSeconds: {{ .timeoutSeconds }}
@@ -110,6 +146,10 @@ spec:
               httpHeaders:
                 - name: Host
                   value: localhost:2368
+                {{- if hasPrefix "https" (default "" .Values.settings.url) }}
+                - name: x-forwarded-proto
+                  value: https
+                {{- end }}
           {{- with .Values.readinessProbe }}
             initialDelaySeconds: {{ .initialDelaySeconds }}
             timeoutSeconds: {{ .timeoutSeconds }}
@@ -131,7 +171,7 @@ spec:
           {{- end }}            
           volumeMounts:
             - mountPath: /tmp
-              name: tmp          
+              name: tmp
             - mountPath: /var/lib/ghost/content
               name: ghost-vol
       {{- with .Values.nodeSelector }}

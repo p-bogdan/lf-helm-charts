@@ -1,14 +1,18 @@
-#  Wordpress
+# Wordpress
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.7.0-apache](https://img.shields.io/badge/AppVersion-5.7.0-informational?style=flat-square)
+![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 6.3.2-apache](https://img.shields.io/badge/AppVersion-6.3.2--apache-informational?style=flat-square)
+
+## Changelog
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Wordpress on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/wordpress
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/wordpress
 ```
 
 ## Introduction
@@ -28,7 +32,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/wordpress
+helm install my-release groundhog2k/wordpress
 ```
 
 ## Uninstalling the Chart
@@ -36,14 +40,14 @@ $ helm install my-release lf-charts/wordpress
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | mariadb | 0.2.10 |
+| @groundhog2k | mariadb | 0.3.14 |
 
 ## Common parameters
 
@@ -57,13 +61,18 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
+| image.registry | string | `"docker.io"` | Image registry |
 | image.repository | string | `"wordpress"` | Image name |
 | image.tag | string | `""` | Image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
+| extraInitContainers | list | `[]` | Extra init containers |
+| extaContainers | list | `[]` | Extra containers for usage as sidecars |
 | strategy | object | `{}` | Pod deployment strategy |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
+| startupProbe | object | `see values.yaml` | Startup probe configuration |
 | readinessProbe | object | `see values.yaml` | Readiness probe configuration |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
+| customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
 | customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
 | nodeSelector | object | `{}` | Deployment node selector |
@@ -79,6 +88,10 @@ $ helm uninstall my-release
 | tolerations | list | `[]` | Tolerations for pod assignment |
 | containerPort | int | `8000` | Internal http container port |
 | replicaCount | int | `1` | Number of replicas |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
+| podDisruptionBudget | object | `{}` | Pod disruption budget |
+| podDisruptionBudget.minAvailable | int | `nil` | Minimum number of pods that must be available after eviction |
+| podDisruptionBudget.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after eviction |
 
 ## Service paramters
 
@@ -89,6 +102,7 @@ $ helm uninstall my-release
 | service.nodePort | int | `nil` | The node port (only relevant for type LoadBalancer or NodePort) |
 | service.clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | service.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| service.annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -97,6 +111,8 @@ $ helm uninstall my-release
 | ingress.enabled | bool | `false` | Enable ingress for Wordpress service |
 | ingress.annotations | string | `nil` | Additional annotations for ingress |
 | ingress.hosts[0].host | string | `""` | Hostname for the ingress endpoint |
+| ingress.hosts[0].host.paths[0].path | string | `"/"` | Default root path |
+| ingress.hosts[0].host.paths[0].pathType | string | `ImplementationSpecific` | Ingress path type (ImplementationSpecific, Prefix, Exact) |
 | ingress.tls | list | `[]` | Ingress TLS parameters |
 | ingress.maxBodySize | string | `"64m"` | Maximum body size for post requests |
 
@@ -125,6 +141,10 @@ $ helm uninstall my-release
 | settings.tablePrefix | string | `nil` | Database table name prefix |
 | settings.maxFileUploadSize | string | `64M` | Maximum file upload size |
 | settings.memoryLimit | string | `128M` | PHP memory limit |
+| settings.configExtra | string | `nil` | Extra values embedded inside wp-config.php |
+| extraEnvSecrets | list | `[]` | A list of existing secrets that will be mounted into the container as environment variables |
+| extraEnvConfigs | list | `[]` | A list of existing configmaps that will be mounted into the container as environment variables |
+| extraSecrets | list | `[]` | A list of additional existing secrets that will be mounted into the container |
 
 ## Storage parameters
 
@@ -134,3 +154,4 @@ $ helm uninstall my-release
 | storage.persistentVolumeClaimName | string | `nil` | PVC name when existing storage volume should be used |
 | storage.requestedSize | string | `nil` | Size for new PVC, when no existing PVC is used |
 | storage.className | string | `nil` | Storage class name |
+| storage.keepPvc | bool | `false` | Keep a created Persistent volume claim when uninstalling the helm chart |

@@ -1,13 +1,12 @@
 apiVersion: v2
 name: postgres
-description: A Helm chart for PostgreSQL on Kubernetes. 
+description: A Helm chart for PostgreSQL on Kubernetes
 
 type: application
 
 maintainers:
-  - name: pbogdan
-    email: test2@example.com
+  - name: groundhog2k
 
-version: 0.2.11
+version: "0.5.0"
 
-appVersion: "13.2"
+appVersion: "16.0"

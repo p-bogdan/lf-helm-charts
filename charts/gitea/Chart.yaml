@@ -5,24 +5,24 @@ description: A Helm chart for Gitea on Kubernetes
 type: application
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
 # This is the chart version
-version: 0.3.4
+version: "0.9.7"
 
 # This is the version number of the application being deployed.
-appVersion: "1.14.1"
+appVersion: "1.20.5"
 
 dependencies:
   - name: mariadb
-    version: 0.2.10
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.2.28"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: mariadb.enabled
   - name: postgres
-    version: 0.2.9
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.2.26"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: postgres.enabled
   - name: redis
-    version: 0.3.1
-    repository: "https://p-bogdan.github.io/lf-helm-charts"
+    version: "0.6.14"
+    repository: "https://groundhog2k.github.io/helm-charts"
     condition: redis.enabled

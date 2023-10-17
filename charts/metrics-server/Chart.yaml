@@ -5,11 +5,11 @@ description: A Helm chart for Kubernetes metrics-server
 type: application
 
 maintainers:
-  - name: pbogdan
+  - name: groundhog2k
 
-version: 2.12.3
+version: 2.13.2
 
-appVersion: "v0.4.2"
+appVersion: "v0.5.1"
 
 keywords:
   - metrics-server

@@ -1,14 +1,18 @@
 # Commento
 
-![Version: 0.1.13](https://img.shields.io/badge/Version-0.1.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.8.0](https://img.shields.io/badge/AppVersion-v1.8.0-informational?style=flat-square)
+![Version: 0.1.35](https://img.shields.io/badge/Version-0.1.35-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.8.0](https://img.shields.io/badge/AppVersion-v1.8.0-informational?style=flat-square)
+
+## Changelog
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Commento on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/commento
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/commento
 ```
 
 ## Introduction
@@ -30,7 +34,7 @@ The Commento image only supports amd64 architecture!
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/commento
+helm install my-release groundhog2k/commento
 ```
 
 ## Uninstalling the Chart
@@ -38,14 +42,14 @@ $ helm install my-release lf-charts/commento
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | postgres | 0.2.9 |
+| @groundhog2k | postgres | 0.2.26 |
 
 ## Common parameters
 
@@ -59,12 +63,15 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"registry.gitlab.com/commento/commento"` | Image name |
+| image.registry | string | `"registry.gitlab.com"` | Image registry |
+| image.repository | string | `"commento/commento"` | Image name |
 | image.tag | string | `""` | Image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | strategy | object | `{}` | Pod deployment strategy |
+| startupProbe | object | `see values.yaml` | Startup probe configuration |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
 | readinessProbe | object | `see values.yaml` | Readiness probe configuration |
+| customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
 | customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
@@ -80,6 +87,10 @@ $ helm uninstall my-release
 | tolerations | list | `[]` | Tolerations for pod assignment |
 | containerPort | int | `8080` | Internal http container port |
 | replicaCount | int | `1` | Number of replicas |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
+| podDisruptionBudget | object | `{}` | Pod disruption budget |
+| podDisruptionBudget.minAvailable | int | `nil` | Minimum number of pods that must be available after eviction |
+| podDisruptionBudget.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after eviction |
 
 ## Service paramters
 
@@ -90,6 +101,7 @@ $ helm uninstall my-release
 | service.nodePort | int | `nil` | The node port (only relevant for type LoadBalancer or NodePort) |
 | service.clusterIP | string | `nil` | The cluster ip address (only relevant for type LoadBalancer or NodePort) |
 | service.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| service.annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -118,7 +130,8 @@ $ helm uninstall my-release
 | settings.akismetKey | string | `nil` | Optional Akismet key |
 | settings.forbidNewOwners | bool | `false` | Forbid new user self registrations |
 | settings.gzipStaticContent | bool | `false` | Enable serve static content GZIP compressed to client |
-| settings.protocol | string | `"https"` | Protocol for external access (through ingress) |
+| settings.protocol | string | `"https"` | Protocol for generated origin URL (when ingress is enabled) |
+| settings.origin | string | `nil` | Alternative Commento origin URL which is prefered over generated URL |
 | settings.oauth.github.enabled | bool | `false` | Enable Github OAuth |
 | settings.oauth.github.key | string | `nil` | Github OAuth key |
 | settings.oauth.github.secret | string | `nil` | Github OAuth secret |

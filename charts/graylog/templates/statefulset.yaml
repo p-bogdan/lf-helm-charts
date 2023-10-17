@@ -11,6 +11,9 @@ spec:
   serviceName: {{ include "graylog.fullname" . }}-internal
   podManagementPolicy: {{ .Values.podManagementPolicy }}      
   replicas: {{ .Values.replicaCount }}
+  {{- if .Values.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- end }}
   updateStrategy: 
     type: {{ .Values.updateStrategyType }}    
   template:
@@ -41,7 +44,7 @@ spec:
             allowPrivilegeEscalation: false
             privileged: false
           {{- end }}
-          image: "{{ .Values.initImage.repository }}:{{ .Values.initImage.tag }}"
+          image: "{{ .Values.initImage.registry }}/{{ .Values.initImage.repository }}:{{ .Values.initImage.tag }}"
           imagePullPolicy: {{ .Values.initImage.pullPolicy }}
           envFrom:
             - secretRef:
@@ -55,7 +58,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ "/scripts/init.sh" ]
           volumeMounts:
@@ -69,7 +72,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -91,6 +94,27 @@ spec:
             {{- include "graylog.environment" . | nindent 12 }}
           {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe:
+            {{- toYaml .Values.customStartupProbe | nindent 12 }}
+          {{- else }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/system/lbstatus
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: localhost:9000
+          {{- with .Values.startupProbe }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            failureThreshold: {{ .failureThreshold }}
+            successThreshold: {{ .successThreshold }}
+            periodSeconds: {{ .periodSeconds }}                
+          {{- end }}
+          {{- end }}
           {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe:

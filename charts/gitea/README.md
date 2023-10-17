@@ -1,14 +1,18 @@
-#  Gitea
+# Gitea
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.14.1](https://img.shields.io/badge/AppVersion-1.14.1-informational?style=flat-square)
+![Version: 0.9.7](https://img.shields.io/badge/Version-0.9.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.20.5](https://img.shields.io/badge/AppVersion-1.20.5-informational?style=flat-square)
+
+## Changelog
+
+see [RELEASENOTES.md](RELEASENOTES.md)
 
 A Helm chart for Gitea on Kubernetes
 
 ## TL;DR
 
 ```bash
-$ helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-$ helm install my-release lf-charts/gitea
+helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
+helm install my-release groundhog2k/gitea
 ```
 
 ## Introduction
@@ -28,7 +32,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release lf-charts/gitea
+helm install my-release groundhog2k/gitea
 ```
 
 ## Uninstalling the Chart
@@ -36,16 +40,16 @@ $ helm install my-release lf-charts/gitea
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | mariadb | 0.2.10 |
-| @groundhog2k | postgres | 0.2.9 |
-| @groundhog2k | redis | 0.3.1 |
+| @groundhog2k | mariadb | 0.2.28 |
+| @groundhog2k | postgres | 0.2.26 |
+| @groundhog2k | redis | 0.6.14 |
 
 ## Common parameters
 
@@ -59,12 +63,15 @@ $ helm uninstall my-release
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
+| image.registry | string | `"docker.io"` | Image registry |
 | image.repository | string | `"gitea/gitea"` | Image name |
 | image.tag | string | `""` | Image tag |
 | imagePullSecrets | list | `[]` | Image pull secrets |
-| strategy | object | `{}` | Pod deployment strategy |
+| strategy.type | object | `Recreate` | Pod deployment strategy |
+| startupProbe | object | `see values.yaml` | Startup probe configuration |
 | livenessProbe | object | `see values.yaml` | Liveness probe configuration |
 | readinessProbe | object | `see values.yaml` | Readiness probe configuration |
+| customStartupProbe | object | `{}` | Custom startup probe (overwrites default startup probe configuration) |
 | customLivenessProbe | object | `{}` | Custom liveness probe (overwrites default liveness probe configuration) |
 | customReadinessProbe | object | `{}` | Custom readiness probe (overwrites default readiness probe configuration) |
 | resources | object | `{}` | Resource limits and requests |
@@ -81,7 +88,7 @@ $ helm uninstall my-release
 | tolerations | list | `[]` | Tolerations for pod assignment |
 | containerHttpPort | int | `8000` | Internal http container port |
 | containerSshPort | int | `8022` | Internal ssh container port |
-| replicaCount | int | `1` | Number of replicas |
+| revisionHistoryLimit | int | `nil` | Maximum number of revisions maintained in revision history
 
 ## Service paramters
 
@@ -92,11 +99,13 @@ $ helm uninstall my-release
 | services.http.nodePort | int | `nil` | Gitea HTTP NodePort (only relevant for type LoadBalancer or NodePort) |
 | services.http.clusterIP | int | `nil` | Gitea HTTP ClusterIP (only relevant for type LoadBalancer or NodePort) |
 | services.http.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| services.http.annotations | object | `{}` | Additional service annotations |
 | services.ssh.type | string | `"ClusterIP"` | Service type |
 | services.ssh.port | int | `22` | Gitea SSH service port |
 | services.ssh.nodePort | int | `nil` | Gitea SSH NodePort (only relevant for type LoadBalancer or NodePort) |
 | services.ssh.clusterIP | int | `nil` | Gitea SSH ClusterIP (only relevant for type LoadBalancer or NodePort)  |
 | services.ssh.loadBalancerIP | string | `nil` | The load balancer ip address (only relevant for type LoadBalancer) |
+| services.ssh.annotations | object | `{}` | Additional service annotations |
 
 ## Ingress parameters
 
@@ -112,13 +121,25 @@ $ helm uninstall my-release
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| externalCache.enabled | bool | `false` | Enable external Redis cache |
+| externalCache.host | string | `nil` | External Redis host and port (host:port) |
 | redis.enabled | bool | `false` | Enable Redis cache deployment (will disable external cache settings) |
 | redis.storage | string | `nil` | Redis storage settings |
+
+**Hint:** When no cache configuration is enabled, then all cache settings have to be provided manually in the `gitea.config` section. See [Gitea Config Cheat Sheet](https://docs.gitea.io/en-us/config-cheat-sheet/) for description of all settings.
 
 ## Database settings
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| fallbackToSqlite | bool | `true` | Falls back to internal SQLite when no database is configured |
+| externalDatabase.enabled | bool | `false` | Enable usage of external database |
+| externalDatabase.type | string | `nil` | External database type ("mysql", "postgres" are supported) |
+| externalDatabase.charset | string | `"utf8mb4"` | Database charset to use (only relevant for mysql/mariadb) |
+| externalDatabase.host | string | `nil` | External database host |
+| externalDatabase.name | string | `nil` | External database name |
+| externalDatabase.user | string | `nil` | External database user name |
+| externalDatabase.password | string | `nil` | External database user password |
 | mariadb.enabled | bool | `false` | Enable MariaDB deployment (will disable external database settings) |
 | mariadb.settings.arguments[0] | string | `"--character-set-server=utf8mb4"` | Enable MariaDB UTF8MB4 character set|
 | mariadb.settings.arguments[1] | string | `"--collation-server=utf8mb4_unicode_ci"` | Enable UTF8MB4 unicode |
@@ -134,6 +155,8 @@ $ helm uninstall my-release
 | postgres.userDatabase.user | string | `nil` | PostgreSQL Gitea database user |
 | postgres.userDatabase.password | string | `nil` | PostgreSQL Gitea database user password |
 
+**Hint:** When no database configuration is enabled and fallbackToSqlite is set `false`, then all database settings have to be provided manually in the `gitea.config` section. See [Gitea Config Cheat Sheet](https://docs.gitea.io/en-us/config-cheat-sheet/) for description of all settings.
+
 ## Gitea parameters
 
 | Key | Type | Default | Description |
@@ -142,7 +165,7 @@ $ helm uninstall my-release
 | settings.defaultAdmin.name | string | `root` | Gitea administrator user |
 | settings.defaultAdmin.password | string | `admin` | Gitea admin user password (Must be changed during first login) |
 | settings.defaultAdmin.email | string | `root@admin.local` | Gitea administrator users email |
-| gitea.config | object | `see values.yaml` | Gitea specific configuration as described in https://docs.gitea.io/en-us/config-cheat-sheet/ - More values and sections can be added |
+| gitea.config | object | `see values.yaml` | Gitea specific configuration as described in the [Gitea Config Cheat Sheet](https://docs.gitea.io/en-us/config-cheat-sheet/) - More values and sections can be added |
 
 It's recommended to set the following Gitea configuration parameters:
 
@@ -162,3 +185,4 @@ It's recommended to set the following Gitea configuration parameters:
 | storage.persistentVolumeClaimName | string | `nil` | PVC name when existing storage volume should be used |
 | storage.requestedSize | string | `nil` | Size for new PVC, when no existing PVC is used |
 | storage.className | string | `nil` | Storage class name |
+| storage.keepPvc | bool | `false` | Keep a created Persistent volume claim when uninstalling the helm chart |
