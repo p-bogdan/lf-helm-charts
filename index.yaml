@@ -38,6 +38,18 @@ entries:
   elasticsearch:
   - apiVersion: v2
     appVersion: 8.0.0
+    created: "2023-10-17T15:28:58.045912207Z"
+    description: A Helm chart for Elasticsearch on Kubernetes
+    digest: d5dac5e1798afebe542b45ae26a451ae58d24de9072277b7597b54dfde302b40
+    maintainers:
+    - name: p-bogdan
+    name: elasticsearch
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/elasticsearch-0.8.3/elasticsearch-0.8.3.tgz
+    version: 0.8.3
+  - apiVersion: v2
+    appVersion: 8.0.0
     created: "2023-10-17T14:44:25.689863205Z"
     description: A Helm chart for Elasticsearch on Kubernetes
     digest: 897f077640a7b321af9f81a7830345f1a44677c5a629c09b35972066e3bee080
@@ -63,6 +75,18 @@ entries:
   etcd:
   - apiVersion: v2
     appVersion: v3.5.9
+    created: "2023-10-17T15:28:58.271497921Z"
+    description: A Helm chart for etcd on Kubernetes
+    digest: 3bbebccb06c73990f5b23fff35b06636f7c2209f91b95bc6cabb09c21101b9f4
+    maintainers:
+    - name: p-bogdan
+    name: etcd
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/etcd-0.1.6/etcd-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: v3.5.9
     created: "2023-10-17T14:44:25.889678425Z"
     description: A Helm chart for etcd on Kubernetes
     digest: 15e4beef53c8053075ac4cf8762876543102ea79fae7739bec8af59831a9dae2
@@ -74,6 +98,27 @@ entries:
     - https://github.com/p-bogdan/lf-helm-charts/releases/download/etcd-0.1.5/etcd-0.1.5.tgz
     version: 0.1.5
   ghost:
+  - apiVersion: v2
+    appVersion: 5.69.0
+    created: "2023-10-17T15:28:58.491714496Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.10.0
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.2.0
+    description: A Helm chart for Ghost on Kubernetes
+    digest: 137a7edf3b65592192be63d508c50899986f95954e2970366910cac59251595f
+    maintainers:
+    - name: p-bogdan
+    name: ghost
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/ghost-0.110.1/ghost-0.110.1.tgz
+    version: 0.110.1
   - apiVersion: v2
     appVersion: 5.69.0
     created: "2023-10-17T14:44:26.133953094Z"
@@ -113,6 +158,31 @@ entries:
     - https://p-bogdan.github.io/lf-helm-charts/ghost-0.5.2.tgz
     version: 0.5.2
   gitea:
+  - apiVersion: v2
+    appVersion: 1.20.5
+    created: "2023-10-17T15:28:58.760436715Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.10.0
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.5.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.7.2
+    description: A Helm chart for Gitea on Kubernetes
+    digest: 64559c1aec0641b0865ab7c36bb55e9217fc26b2ec7e473a49a4b96b50279447
+    maintainers:
+    - name: p-bogdan
+    name: gitea
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/gitea-0.9.8/gitea-0.9.8.tgz
+    version: 0.9.8
   - apiVersion: v2
     appVersion: 1.20.5
     created: "2023-10-17T14:44:26.33578889Z"
@@ -166,6 +236,27 @@ entries:
   graylog:
   - apiVersion: v2
     appVersion: 5.1.7
+    created: "2023-10-17T15:28:58.9535819Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.6.0
+    - condition: elasticsearch.enabled
+      name: elasticsearch
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.8.2
+    description: A Helm chart for Graylog on Kubernetes
+    digest: f3d25eaf4f7d146bdf9d899856d1cdadccdfd99cf4099f831dd6f0c384332883
+    maintainers:
+    - name: groundhog2k
+    name: graylog
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/graylog-0.6.11/graylog-0.6.11.tgz
+    version: 0.6.11
+  - apiVersion: v2
+    appVersion: 5.1.7
     created: "2023-10-17T14:44:26.552947495Z"
     dependencies:
     - condition: mongodb.enabled
@@ -206,7 +297,30 @@ entries:
     urls:
     - https://p-bogdan.github.io/lf-helm-charts/graylog-0.1.14.tgz
     version: 0.1.14
+  hello-world:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-10-17T15:28:59.189780292Z"
+    description: A Helm chart for Kubernetes
+    digest: 10eeff751da88ed2a718d0e0b1529bd8c543b992d1ea70248dd2d88f643ebbf8
+    name: hello-world
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/hello-world-0.1.1/hello-world-0.1.1.tgz
+    version: 0.1.1
   mariadb:
+  - apiVersion: v2
+    appVersion: 11.1.2
+    created: "2023-10-17T15:28:59.406175111Z"
+    description: A Helm chart for MariaDB on Kubernetes
+    digest: 0b41693a7a294a6541be1fbb48bfad7a24bdd2466302fc4564ad1b1b1e6984f3
+    maintainers:
+    - name: p-bogdan
+    name: mariadb
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/mariadb-0.10.1/mariadb-0.10.1.tgz
+    version: 0.10.1
   - apiVersion: v2
     appVersion: 11.1.2
     created: "2023-10-17T14:44:26.716683163Z"
@@ -232,6 +346,20 @@ entries:
     - https://p-bogdan.github.io/lf-helm-charts/mariadb-0.2.10.tgz
     version: 0.2.10
   metrics-server:
+  - apiVersion: v2
+    appVersion: v0.5.1
+    created: "2023-10-17T15:28:59.612355347Z"
+    description: A Helm chart for Kubernetes metrics-server
+    digest: 46102c3016647cf7ab2158b9cd73dfa3e4e3ddf9c1913439e50f8ae89372f4a1
+    keywords:
+    - metrics-server
+    maintainers:
+    - name: p-bogdan
+    name: metrics-server
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/metrics-server-2.13.3/metrics-server-2.13.3.tgz
+    version: 2.13.3
   - apiVersion: v2
     appVersion: v0.5.1
     created: "2023-10-17T14:44:26.883567393Z"
@@ -263,6 +391,18 @@ entries:
   mongodb:
   - apiVersion: v2
     appVersion: 7.0.2
+    created: "2023-10-17T15:28:59.825178407Z"
+    description: A Helm chart to deploy MongoDB
+    digest: 620abbf0c4c574541ec619c1cfbd5b25244f2b318d47b17c008a9c05bf671ccc
+    maintainers:
+    - name: p-bogdan
+    name: mongodb
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/mongodb-0.6.1/mongodb-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
+    appVersion: 7.0.2
     created: "2023-10-17T14:44:27.036492995Z"
     description: A Helm chart to deploy MongoDB
     digest: 13f3ab621df5fc72016b4d0158562a145cc30e7931668f48249000ee555528ed
@@ -288,6 +428,18 @@ entries:
   mysql:
   - apiVersion: v2
     appVersion: 8.1.0
+    created: "2023-10-17T15:29:00.05339399Z"
+    description: A Helm chart for MySQL on Kubernetes
+    digest: 8938283866c2489ea5e9a6cf46b534582a0b2ff1133e04c10a5ab43172643ff9
+    maintainers:
+    - name: p-bogdan
+    name: mysql
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/mysql-0.2.1/mysql-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 8.1.0
     created: "2023-10-17T14:44:27.252807211Z"
     description: A Helm chart for MySQL on Kubernetes
     digest: f134256c8f546fb12461840ff8133e3bb8cfa64aa4e74c8030c3d338cb5f0e24
@@ -299,6 +451,31 @@ entries:
     - https://github.com/p-bogdan/lf-helm-charts/releases/download/mysql-0.2.0/mysql-0.2.0.tgz
     version: 0.2.0
   nextcloud:
+  - apiVersion: v2
+    appVersion: 27.1.2-apache
+    created: "2023-10-17T15:29:00.292309451Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.10.0
+    - condition: postgres.enabled
+      name: postgres
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.5.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.7.2
+    description: A Helm chart for Nextcloud on Kubernetes
+    digest: 52b0703894e683107d14dc1ffa8f28fa5b09c584dae0ef6f1758b12b2c52092b
+    maintainers:
+    - name: p-bogdan
+    name: nextcloud
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/nextcloud-0.15.3/nextcloud-0.15.3.tgz
+    version: 0.15.3
   - apiVersion: v2
     appVersion: 27.1.2-apache
     created: "2023-10-17T14:44:27.457424772Z"
@@ -352,6 +529,20 @@ entries:
   nfs-client-provisioner:
   - apiVersion: v1
     appVersion: 4.0.0
+    created: "2023-10-17T15:29:00.517816565Z"
+    deprecated: true
+    description: nfs-client is an automatic provisioner that used your *already configured*
+      NFS server, automatically creating Persistent Volumes.
+    digest: 6601c848ade4a2c3985a48972f35c46405edc72aaf46bc31d33bae7932da3d1d
+    keywords:
+    - nfs
+    - storage
+    name: nfs-client-provisioner
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/nfs-client-provisioner-4.0.1/nfs-client-provisioner-4.0.1.tgz
+    version: 4.0.1
+  - apiVersion: v1
+    appVersion: 4.0.0
     created: "2023-10-11T10:55:37.477103+03:00"
     deprecated: true
     description: nfs-client is an automatic provisioner that used your *already configured*
@@ -365,6 +556,18 @@ entries:
     - https://p-bogdan.github.io/lf-helm-charts/nfs-client-provisioner-4.0.0.tgz
     version: 4.0.0
   postgres:
+  - apiVersion: v2
+    appVersion: "16.0"
+    created: "2023-10-17T15:29:00.703473237Z"
+    description: A Helm chart for PostgreSQL on Kubernetes
+    digest: 8268089afe430666411ab3f96ad034e1deebfb09886527cf2702c5fea1105b6b
+    maintainers:
+    - name: p-bogdan
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/postgres-0.5.1/postgres-0.5.1.tgz
+    version: 0.5.1
   - apiVersion: v2
     appVersion: "16.0"
     created: "2023-10-17T14:44:27.63325139Z"
@@ -393,6 +596,18 @@ entries:
   rabbitmq:
   - apiVersion: v2
     appVersion: 3.12.6
+    created: "2023-10-17T15:29:00.961380379Z"
+    description: A Helm chart for a RabbitMQ cluster on Kubernetes
+    digest: 10a6ff110c64091cbf3d98b759f4e710a54bec196635f19c482407269486b39c
+    maintainers:
+    - name: p-bogdan
+    name: rabbitmq
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/rabbitmq-0.7.7/rabbitmq-0.7.7.tgz
+    version: 0.7.7
+  - apiVersion: v2
+    appVersion: 3.12.6
     created: "2023-10-17T14:44:27.790599737Z"
     description: A Helm chart for a RabbitMQ cluster on Kubernetes
     digest: bb0c82ca901a34116a301f8151db55a1af634cb789af2aa4e1872a23b37022b4
@@ -416,6 +631,18 @@ entries:
     - https://p-bogdan.github.io/lf-helm-charts/rabbitmq-0.2.13.tgz
     version: 0.2.13
   redis:
+  - apiVersion: v2
+    appVersion: 7.2.1
+    created: "2023-10-17T15:29:01.167314518Z"
+    description: A Helm chart for Redis on Kubernetes
+    digest: 625885e2c36ee9e4611d2843f558187ba52a63659bf9b2be4b2b86efe81a3238
+    maintainers:
+    - name: p-bogdan
+    name: redis
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/redis-0.7.3/redis-0.7.3.tgz
+    version: 0.7.3
   - apiVersion: v2
     appVersion: 7.2.1
     created: "2023-10-17T14:44:27.950131058Z"
@@ -443,6 +670,23 @@ entries:
   remark42:
   - apiVersion: v2
     appVersion: v1.12.1
+    created: "2023-10-17T15:29:01.405340289Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.7.2
+    description: A Helm chart for Remark42 comment system
+    digest: f1b2cd6aa8e7865ca7e343ec53c39b0afa1d94828625fcf451d78b205355398a
+    maintainers:
+    - name: p-bogdan
+    name: remark42
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/remark42-0.6.2/remark42-0.6.2.tgz
+    version: 0.6.2
+  - apiVersion: v2
+    appVersion: v1.12.1
     created: "2023-10-17T14:44:28.138707718Z"
     dependencies:
     - condition: redis.enabled
@@ -459,6 +703,23 @@ entries:
     - https://github.com/p-bogdan/lf-helm-charts/releases/download/remark42-0.6.1/remark42-0.6.1.tgz
     version: 0.6.1
   wordpress:
+  - apiVersion: v2
+    appVersion: 6.3.2-apache
+    created: "2023-10-17T15:29:01.616920963Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://p-bogdan.github.io/lf-helm-charts
+      version: 0.10.0
+    description: A Helm chart for Wordpress on Kubernetes
+    digest: 2c782c40b2f73f1bb73ae5433c075a3a5aa74beaf2b95cf867901ecf6a1f5496
+    maintainers:
+    - name: p-bogdan
+    name: wordpress
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/wordpress-0.9.3/wordpress-0.9.3.tgz
+    version: 0.9.3
   - apiVersion: v2
     appVersion: 6.3.2-apache
     created: "2023-10-17T14:44:28.552817279Z"
@@ -493,4 +754,4 @@ entries:
     urls:
     - https://p-bogdan.github.io/lf-helm-charts/wordpress-0.3.1.tgz
     version: 0.3.1
-generated: "2023-10-17T14:44:28.552848079Z"
+generated: "2023-10-17T15:29:01.617090461Z"
