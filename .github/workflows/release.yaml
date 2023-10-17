@@ -29,12 +29,12 @@ jobs:
           rm -rf .cr-release-packages
           mkdir -p .cr-release-packages
           helm package charts/ --destination=.cr-release-packages
-      - name: Creating/Updating repo index
-        run: |
-          helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
-          ls -al
-          helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
-          helm repo update
+      # - name: Creating/Updating repo index
+      #   run: |
+      #     helm repo index --url https://p-bogdan.github.io/lf-helm-charts .
+      #     ls -al
+      #     helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
+      #     helm repo update
       #- name: Add dependencies
       #  run: |
       #    helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
