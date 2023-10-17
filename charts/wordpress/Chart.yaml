@@ -15,6 +15,6 @@ appVersion: "6.3.2-apache"
 
 dependencies:
   - name: mariadb
-    version: "0.3.14"
+    version: "0.10.0"
     repository: "https://p-bogdan.github.io/lf-helm-charts"
     condition: mariadb.enabled
