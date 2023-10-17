@@ -13,10 +13,10 @@ appVersion: "5.1.7"
 
 dependencies:
   - name: mongodb
-    version: "0.5.19"
+    version: "0.6.0"
     repository: "https://p-bogdan.github.io/lf-helm-charts"
     condition: mongodb.enabled
   - name: elasticsearch
-    version: "0.1.106"
+    version: "0.8.2"
     repository: "https://p-bogdan.github.io/lf-helm-charts"
     condition: elasticsearch.enabled
