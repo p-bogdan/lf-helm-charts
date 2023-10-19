@@ -8,7 +8,7 @@ maintainers:
   - name: p-bogdan
 
 # This is the chart version
-version: "0.7.3"
+version: "0.7.4"
 
 # This is the version number of the application being deployed.
 appVersion: "7.2.1"
