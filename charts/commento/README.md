@@ -11,8 +11,8 @@ A Helm chart for Commento on Kubernetes
 ## TL;DR
 
 ```bash
-helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-helm install my-release groundhog2k/commento
+helm repo add lf-charts https://p-bogdan.github.io/lf-helm-charts
+helm install my-release lf-charts/commento
 ```
 
 ## Introduction
@@ -34,7 +34,7 @@ The Commento image only supports amd64 architecture!
 To install the chart with the release name `my-release`:
 
 ```bash
-helm install my-release groundhog2k/commento
+helm install my-release lf-charts/commento
 ```
 
 ## Uninstalling the Chart
@@ -49,7 +49,7 @@ helm uninstall my-release
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | postgres | 0.2.26 |
+| @p-bogdan | postgres | 0.2.26 |
 
 ## Common parameters
 

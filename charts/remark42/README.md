@@ -7,8 +7,8 @@ A Helm chart for Remark42 on Kubernetes
 ## TL;DR
 
 ```bash
-helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-helm install my-release groundhog2k/remark42
+helm repo add p-bogdan https://p-bogdan.github.io/lf-helm-charts
+helm install my-release p-bogdan/remark42
 ```
 
 ## Introduction
@@ -30,7 +30,7 @@ The Remark42 image supports amd64 architecture only!
 To install the chart with the release name `my-release`:
 
 ```bash
-helm install my-release groundhog2k/remark42
+helm install my-release p-bogdan/remark42
 ```
 
 ## Uninstalling the Chart
@@ -45,7 +45,7 @@ helm uninstall my-release
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | redis | 0.6.14 |
+| @p-bogdan | redis | 0.6.14 |
 
 ## Common parameters
 

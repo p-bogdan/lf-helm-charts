@@ -14,7 +14,7 @@ The [NFS client provisioner](https://github.com/kubernetes-incubator/external-st
 ## TL;DR;
 
 ```console
-$ helm install --set nfs.server=x.x.x.x --set nfs.path=/exported/path groundhog2k/nfs-client-provisioner
+$ helm install --set nfs.server=x.x.x.x --set nfs.path=/exported/path p-bogdan/nfs-client-provisioner
 ```
 
 For **arm** deployments set `image.repository` to `--set image.repository=quay.io/external_storage/nfs-client-provisioner-arm`

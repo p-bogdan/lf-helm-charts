@@ -11,8 +11,8 @@ A Helm chart for Wordpress on Kubernetes
 ## TL;DR
 
 ```bash
-helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-helm install my-release groundhog2k/wordpress
+helm repo add p-bogdan https://p-bogdan.github.io/lf-helm-charts
+helm install my-release p-bogdan/wordpress
 ```
 
 ## Introduction
@@ -32,7 +32,7 @@ It fully supports deployment of the multi-architecture docker image.
 To install the chart with the release name `my-release`:
 
 ```bash
-helm install my-release groundhog2k/wordpress
+helm install my-release p-bogdan/wordpress
 ```
 
 ## Uninstalling the Chart
@@ -47,7 +47,7 @@ helm uninstall my-release
 
 | Repository | Name | Version |
 |------------|------|---------|
-| @groundhog2k | mariadb | 0.3.14 |
+| @p-bogdan | mariadb | 0.3.14 |
 
 ## Common parameters
 

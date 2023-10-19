@@ -17,8 +17,8 @@ A Helm chart for Elasticsearch on Kubernetes
 ## TL;DR
 
 ```bash
-helm repo add groundhog2k https://groundhog2k.github.io/helm-charts/
-helm install my-release groundhog2k/elasticsearch
+helm repo add p-bogdan https://p-bogdan.github.io/lf-helm-charts
+helm install my-release p-bogdan/elasticsearch
 ```
 
 ## Introduction
@@ -42,7 +42,7 @@ The actual chart version only supports a single-node Elasticsearch cluster (repl
 To install the chart with the release name `my-release`:
 
 ```bash
-helm install my-release groundhog2k/elasticsearch
+helm install my-release p-bogdan/elasticsearch
 ```
 
 ## Uninstalling the Chart
