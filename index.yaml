@@ -748,6 +748,18 @@ entries:
   postgres:
   - apiVersion: v2
     appVersion: "16.0"
+    created: "2023-10-27T16:35:03.608884501Z"
+    description: A Helm chart for PostgreSQL on Kubernetes
+    digest: 8e13bb533fbeaf5dcc692e0c66ad5ed79043290379444662b135fc55205014a2
+    maintainers:
+    - name: p-bogdan
+    name: postgres
+    type: application
+    urls:
+    - https://github.com/p-bogdan/lf-helm-charts/releases/download/postgres-0.5.3/postgres-0.5.3.tgz
+    version: 0.5.3
+  - apiVersion: v2
+    appVersion: "16.0"
     created: "2023-10-19T22:02:54.09947704Z"
     description: A Helm chart for PostgreSQL on Kubernetes
     digest: 1b24e44aff75a6b4b666bcb9d581615d703fbae9f251b70069d5fc6cf84767a2
@@ -1014,4 +1026,4 @@ entries:
     urls:
     - https://p-bogdan.github.io/lf-helm-charts/wordpress-0.3.1.tgz
     version: 0.3.1
-generated: "2023-10-19T22:02:54.657165035Z"
+generated: "2023-10-27T16:35:03.608989105Z"
